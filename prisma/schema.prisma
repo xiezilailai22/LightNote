@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 笔记模型
+model Note {
+  id          String   @id @default(cuid())
+  content     String   // 保存的笔记内容
+  sourceUrl   String   // 原文链接
+  sourceTitle String?  // 原网页标题
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  tags        Tag[]    // 多对多关系
+  folder      Folder?  @relation(fields: [folderId], references: [id])
+  folderId    String?  @map("folder_id")
+
+  @@index([createdAt(sort: Desc)]) // 按创建时间倒序索引
+  @@map("notes")
+}
+
+// 标签模型
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique // 标签名称
+  color     String?  // 标签颜色
+  createdAt DateTime @default(now()) @map("created_at")
+  notes     Note[]   // 多对多关系
+
+  @@map("tags")
+}
+
+// 文件夹模型 (进阶功能)
+model Folder {
+  id        String   @id @default(cuid())
+  name      String   // 文件夹名称
+  createdAt DateTime @default(now()) @map("created_at")
+  notes     Note[]   // 一对多关系
+  
+  @@map("folders")
+} 

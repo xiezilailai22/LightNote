@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LightNote</title>
+  <style>
+    body {
+      width: 320px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 16px;
+      color: #333;
+    }
+    
+    h1 {
+      font-size: 18px;
+      margin: 0 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .logo {
+      width: 24px;
+      height: 24px;
+    }
+    
+    .instruction {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #666;
+      margin-bottom: 16px;
+    }
+    
+    .shortcuts {
+      background-color: #f7f7f7;
+      border-radius: 4px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .shortcut {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    
+    .shortcut:last-child {
+      margin-bottom: 0;
+    }
+    
+    .key {
+      background: #e6e6e6;
+      border-radius: 3px;
+      padding: 2px 6px;
+      border: 1px solid #ccc;
+      font-family: monospace;
+    }
+    
+    .btn {
+      display: block;
+      width: 100%;
+      background-color: #0070f3;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    
+    .btn:hover {
+      background-color: #0060df;
+    }
+    
+    .footer {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #222;
+        color: #eee;
+      }
+      
+      h1 {
+        border-bottom-color: #444;
+      }
+      
+      .instruction {
+        color: #bbb;
+      }
+      
+      .shortcuts {
+        background-color: #333;
+      }
+      
+      .key {
+        background: #444;
+        border-color: #555;
+        color: #eee;
+      }
+      
+      .footer {
+        color: #777;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1><img src="icons/icon-32.png" class="logo" alt="LightNote logo">LightNote</h1>
+  
+  <div class="instruction">
+    选中文本，然后右键点击"保存到LightNote"或使用快捷键保存内容。
+  </div>
+  
+  <div class="shortcuts">
+    <div class="shortcut">
+      <span>保存选中内容:</span>
+      <span><span class="key">Ctrl</span> + <span class="key">Shift</span> + <span class="key">S</span></span>
+    </div>
+    <div class="shortcut">
+      <span>打开LightNote:</span>
+      <span><span class="key">Alt</span> + <span class="key">L</span></span>
+    </div>
+  </div>
+  
+  <button id="openApp" class="btn">打开LightNote应用</button>
+  
+  <div class="footer">
+    Version 0.1.0
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html> 

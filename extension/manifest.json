@@ -1,0 +1,1 @@
+{ "manifest_version": 3, "name": "LightNote", "version": "0.1.0", "description": "轻量化网页内容保存工具", "permissions": ["contextMenus", "storage", "activeTab"], "host_permissions": ["http://localhost:3000/*"], "background": { "service_worker": "background.js" } }
