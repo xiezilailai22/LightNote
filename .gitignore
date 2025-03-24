@@ -7,8 +7,8 @@
 /coverage
 
 # next.js
-/.next/
-/out/
+.next
+/out
 
 # production
 /build
@@ -36,9 +36,3 @@ next-env.d.ts
 # IDE
 .idea/
 .vscode/
-*.swp
-*.swo
-
-# browser extension
-extension/icons/*.png
-extension/*.zip
