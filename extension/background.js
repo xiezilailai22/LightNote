@@ -42,7 +42,7 @@ async function saveContent(data) {
     showNotification("正在保存到LightNote...");
     
     // 发送到后端API
-    const response = await fetch("http://localhost:3000/api/notes", {
+    const response = await fetch("http://localhost:3001/api/notes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

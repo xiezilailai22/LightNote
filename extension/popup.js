@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 添加点击事件处理程序
   openAppButton.addEventListener('click', () => {
     // 打开LightNote应用页面
-    chrome.tabs.create({ url: 'http://localhost:3000' });
+    chrome.tabs.create({ url: 'http://localhost:3001' });
     
     // 关闭弹出窗口
     window.close();
