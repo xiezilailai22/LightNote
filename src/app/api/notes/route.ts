@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     let tags = []
     if (data.tags && data.tags.length > 0) {
       // 对每个标签名进行处理（去重、清理）
-      const uniqueTags = [...new Set(data.tags.map(tag => tag.trim()).filter(Boolean))]
+      const uniqueTags = Array.from(new Set(data.tags.map(tag => tag.trim()).filter(Boolean)))
       
       // 为每个标签创建或查找标签记录
       tags = await Promise.all(
