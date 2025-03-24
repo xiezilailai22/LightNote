@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { ExternalLink, TagIcon, Edit, Trash2 } from 'lucide-react'
+import { ExternalLink, TagIcon, Edit, Trash2, ChevronDown, ChevronUp } from 'lucide-react'
 import { format } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 import { prisma } from '@/lib/db'
@@ -38,6 +38,8 @@ export default function NoteList({ notes }: NoteListProps) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState<string | null>(null)
   const [openEditDialog, setOpenEditDialog] = useState<string | null>(null)
   const [deleting, setDeleting] = useState(false)
+  // 新增：跟踪标签展开状态
+  const [expandedTags, setExpandedTags] = useState<Record<string, boolean>>({})
 
   // 处理删除笔记
   const handleDelete = async (noteId: string) => {
@@ -61,6 +63,14 @@ export default function NoteList({ notes }: NoteListProps) {
     } finally {
       setDeleting(false)
     }
+  }
+
+  // 新增：切换标签展开状态
+  const toggleTagsExpanded = (noteId: string) => {
+    setExpandedTags(prev => ({
+      ...prev,
+      [noteId]: !prev[noteId]
+    }))
   }
 
   return (
@@ -119,26 +129,54 @@ export default function NoteList({ notes }: NoteListProps) {
             </CardHeader>
             
             {/* 正文：占满剩余空间，超出部分省略 */}
-            <CardContent className="flex-grow overflow-hidden">
-              <p className="line-clamp-[8] text-sm">{note.content}</p>
+            <CardContent className="flex-grow overflow-hidden pb-0">
+              <p className="line-clamp-[8] text-sm h-full overflow-hidden">{note.content}</p>
             </CardContent>
             
             {/* 最后一排：标签，无标签时显示"暂无标签" */}
-            <CardFooter className="flex flex-wrap gap-2 border-t pt-3 mt-auto">
-              <TagIcon size={14} className="text-muted-foreground" />
-              {note.tags.length > 0 ? (
-                note.tags.map((tag) => (
-                  <Badge key={tag.id} variant="outline" className="text-xs">
-                    {tag.name}
-                  </Badge>
-                ))
-              ) : (
-                <span className="text-xs text-muted-foreground">暂无标签</span>
-              )}
+            <CardFooter className="flex flex-col border-t pt-3 mt-auto w-full">
+              <div className="flex items-center w-full">
+                <TagIcon size={14} className="text-muted-foreground mr-2 flex-shrink-0" />
+                
+                {note.tags.length === 0 ? (
+                  <span className="text-xs text-muted-foreground">暂无标签</span>
+                ) : (
+                  <div className="flex justify-between items-start w-full">
+                    {/* 显示前5个标签或展开后的全部标签 */}
+                    <div className="flex flex-wrap gap-2 flex-grow overflow-hidden">
+                      {(expandedTags[note.id] 
+                        ? note.tags 
+                        : note.tags.slice(0, 5)
+                      ).map((tag) => (
+                        <Badge key={tag.id} variant="outline" className="text-xs">
+                          {tag.name}
+                        </Badge>
+                      ))}
+                    </div>
+
+                    {/* 显示展开/收起按钮，只有标签数量>5时 */}
+                    {note.tags.length > 5 && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 w-6 p-0 ml-1 flex-shrink-0"
+                        onClick={() => toggleTagsExpanded(note.id)}
+                        title={expandedTags[note.id] ? "收起" : "展开"}
+                      >
+                        {expandedTags[note.id] ? (
+                          <ChevronUp size={14} />
+                        ) : (
+                          <ChevronDown size={14} />
+                        )}
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </div>
             </CardFooter>
 
             {/* 删除确认对话框 */}
-            <AlertDialog open={openDeleteDialog === note.id} onOpenChange={(isOpen) => {
+            <AlertDialog open={openDeleteDialog === note.id} onOpenChange={(isOpen: boolean) => {
               if (!isOpen) setOpenDeleteDialog(null)
             }}>
               <AlertDialogContent>
@@ -171,7 +209,7 @@ export default function NoteList({ notes }: NoteListProps) {
             key={`edit-${note.id}`}
             note={note}
             open={openEditDialog === note.id}
-            onOpenChange={(isOpen) => {
+            onOpenChange={(isOpen: boolean) => {
               if (!isOpen) setOpenEditDialog(null)
             }}
             onSuccess={() => {
