@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
+import { Tag } from '@prisma/client'
 
 // 保存笔记的请求体类型
 interface SaveNoteData {
@@ -22,7 +23,7 @@ export async function POST(request: Request) {
     }
 
     // 处理标签（如果有）
-    let tags = []
+    let tags: Tag[] = []
     if (data.tags && data.tags.length > 0) {
       // 对每个标签名进行处理（去重、清理）
       const uniqueTags = Array.from(new Set(data.tags.map(tag => tag.trim()).filter(Boolean)))
