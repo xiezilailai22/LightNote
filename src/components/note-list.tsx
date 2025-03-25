@@ -131,7 +131,14 @@ export default function NoteList({ notes }: NoteListProps) {
             
             {/* 正文：占满剩余空间，超出部分省略 */}
             <CardContent className="flex-grow overflow-hidden py-3 px-4">
-              <p className="text-sm h-full overflow-hidden">{note.content}</p>
+              <p style={{
+                display: '-webkit-box',
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              } as React.CSSProperties} className="text-sm h-full">
+                {note.content}
+              </p>
             </CardContent>
             
             {/* 底部容器：标签，固定高度，可展开 */}
