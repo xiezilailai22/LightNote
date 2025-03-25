@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import { EditNoteDialog } from '@/components/edit-note-dialog'
 import { useRouter } from 'next/navigation'
+import { cn } from '@/lib/utils'
 
 // 使用Prisma类型定义笔记和标签的接口
 interface NoteWithTags {
@@ -82,8 +83,8 @@ export default function NoteList({ notes }: NoteListProps) {
       ) : (
         notes.map((note) => (
           <Card key={note.id} className="flex flex-col h-[calc(33vh-2rem)] min-h-[200px]">
-            <CardHeader className="pb-2 space-y-2">
-              <div className="flex justify-between items-start">
+            <CardHeader className="pb-2 pt-3 px-4 flex-shrink-0 h-[72px] border-b">
+              <div className="flex justify-between items-center w-full">
                 {/* 第一排：日期、时间 */}
                 <time 
                   dateTime={note.createdAt.toISOString()} 
@@ -129,24 +130,27 @@ export default function NoteList({ notes }: NoteListProps) {
             </CardHeader>
             
             {/* 正文：占满剩余空间，超出部分省略 */}
-            <CardContent className="flex-grow overflow-hidden pb-0">
-              <p className="line-clamp-[8] text-sm h-full overflow-hidden">{note.content}</p>
+            <CardContent className="flex-grow overflow-hidden py-3 px-4">
+              <p className="text-sm h-full overflow-hidden">{note.content}</p>
             </CardContent>
             
-            {/* 最后一排：标签，无标签时显示"暂无标签" */}
-            <CardFooter className="flex flex-col border-t pt-3 mt-auto w-full">
-              <div className="flex items-center w-full">
-                <TagIcon size={14} className="text-muted-foreground mr-2 flex-shrink-0" />
+            {/* 底部容器：标签，固定高度，可展开 */}
+            <CardFooter className={cn(
+              "flex-col border-t pt-3 pb-3 px-4 mt-auto w-full flex-shrink-0 transition-all duration-200",
+              expandedTags[note.id] ? "max-h-[120px] overflow-y-auto" : "h-[48px] overflow-hidden"
+            )}>
+              <div className="flex items-start w-full">
+                <TagIcon size={14} className="text-muted-foreground mr-2 flex-shrink-0 mt-0.5" />
                 
                 {note.tags.length === 0 ? (
                   <span className="text-xs text-muted-foreground">暂无标签</span>
                 ) : (
                   <div className="flex justify-between items-start w-full">
-                    {/* 显示前5个标签或展开后的全部标签 */}
-                    <div className="flex flex-wrap gap-2 flex-grow overflow-hidden">
+                    {/* 显示标签，收起时仅显示4个标签，展开时显示全部 */}
+                    <div className="flex flex-wrap gap-2 flex-grow">
                       {(expandedTags[note.id] 
                         ? note.tags 
-                        : note.tags.slice(0, 5)
+                        : note.tags.slice(0, 4)
                       ).map((tag) => (
                         <Badge key={tag.id} variant="outline" className="text-xs">
                           {tag.name}
@@ -154,8 +158,8 @@ export default function NoteList({ notes }: NoteListProps) {
                       ))}
                     </div>
 
-                    {/* 显示展开/收起按钮，只有标签数量>5时 */}
-                    {note.tags.length > 5 && (
+                    {/* 显示展开/收起按钮，只在标签数量>4时显示 */}
+                    {note.tags.length > 4 && (
                       <Button
                         variant="ghost"
                         size="sm"
