@@ -137,7 +137,7 @@ export default function NoteList({ notes }: NoteListProps) {
             {/* 底部容器：标签，固定高度，可展开 */}
             <CardFooter className={cn(
               "flex-col border-t pt-3 pb-3 px-4 mt-auto w-full flex-shrink-0 transition-all duration-200",
-              expandedTags[note.id] ? "max-h-[120px] overflow-y-auto" : "h-[48px] overflow-hidden"
+              expandedTags[note.id] ? "max-h-[120px] overflow-y-auto" : "h-[48px]"
             )}>
               <div className="flex items-start w-full">
                 <TagIcon size={14} className="text-muted-foreground mr-2 flex-shrink-0 mt-0.5" />
@@ -147,7 +147,7 @@ export default function NoteList({ notes }: NoteListProps) {
                 ) : (
                   <div className="flex justify-between items-start w-full">
                     {/* 显示标签，收起时仅显示4个标签，展开时显示全部 */}
-                    <div className="flex flex-wrap gap-2 flex-grow">
+                    <div className="flex flex-wrap gap-2 flex-grow" style={{ maxHeight: expandedTags[note.id] ? 'unset' : '24px', overflow: 'hidden' }}>
                       {(expandedTags[note.id] 
                         ? note.tags 
                         : note.tags.slice(0, 4)
