@@ -175,9 +175,9 @@ export default function NoteList({ notes }: NoteListProps) {
                         title={expandedTags[note.id] ? "收起" : "展开"}
                       >
                         {expandedTags[note.id] ? (
-                          <ChevronUp size={14} />
-                        ) : (
                           <ChevronDown size={14} />
+                        ) : (
+                          <ChevronUp size={14} />
                         )}
                       </Button>
                     )}
